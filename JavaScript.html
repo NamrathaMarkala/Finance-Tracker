@@ -1,0 +1,116 @@
+<script>
+  window.addEventListener("load", functionInit, true); 
+
+  //Initialize functions onload
+  function functionInit(){
+    var inputCategoryList = "";
+    preventFormSubmit();
+    getAllInputCategories();
+    getPaymentMethods();
+  };
+
+  // Prevent forms default behaviour (Prevent reloading the page)
+  function preventFormSubmit() {
+    var forms = document.querySelectorAll('form');
+    for (var i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', function(event) {
+      event.preventDefault();
+      });
+    }
+  } 
+  
+
+  /**
+   * The handleFormSubmit() function passes the formObject to the processForm 
+   * function in the Code.gs file
+   */
+  function handleFormSubmit(formObject) {
+    google.script.run.processForm(formObject);
+    document.getElementById("budgetDetails").reset();
+  }
+
+  
+  /**
+   * The getAllInputCategories() function call the getInputCategories() function 
+   * in the Code.gs file during the page load and retrieve all the input categories 
+   * defined in the "Settings" tab of the Google Sheet.
+  */
+  function getAllInputCategories(){
+    google.script.run.withSuccessHandler(createEntryCategoryLists).getInputCategories();
+  }
+
+  /**
+   * The function createEntryCategoryLists() separates the income and expenditure categories
+   * from the list returned by the getInputCategories() *function in the Code.gs file. 
+   * It then creates two lists, named Income and Expenditure containing the respective categories.
+  */
+  function createEntryCategoryLists(inputCategories){
+    const incomeArray = [];
+    const expenditureArray = [];
+    inputCategories.forEach(function (entry) {
+      const category = entry[0];
+      const value = entry[1];
+      if (category === "Income") {
+        incomeArray.push(value);
+      } else if (category === "Expenditure") {
+        expenditureArray.push(value);
+      }
+    });
+    inputCategoryList =  {
+      income: incomeArray,
+      expenditure: expenditureArray
+    };
+  }  
+
+
+  /**
+   * The following adds event listener to the income and expenditure radio buttons.
+   * The options list for the entryCategory dropdown list is assigned based on the 
+   * selection of the radio button.
+  */
+  var radioButtons = document.getElementsByName('entryType');
+
+  radioButtons.forEach(function (radioButton) {
+    radioButton.addEventListener('click', function () {
+      var selectedOption = this.value;
+      if(selectedOption=="income"){
+        populateDDL(inputCategoryList.income,"entryCategory");
+      }else if(selectedOption=="expenditure"){
+        populateDDL(inputCategoryList.expenditure,"entryCategory");
+      }
+    });
+  });
+
+
+  /**
+   * The following getPaymentMethods() function calls the getPaymentMethods() in the Code.gs file.
+   * Then the return values pass to the populatePaymentMethodsDDL() function.
+  */
+  function getPaymentMethods(){
+    google.script.run.withSuccessHandler(populatePaymentMethodsDDL).getPaymentMethods();
+  }
+
+  /**
+   * The populatePaymentMethodsDDL() function receives the payment method list from the 
+   *  getPaymentMethods() function above and populate the payment methods dropdown list with it.
+  */
+  function populatePaymentMethodsDDL(paymentMethods){
+    populateDDL(paymentMethods,"paymentMethod");
+  }
+
+
+/**
+ * The following function populates any dropdown list of the given ID from the
+ * list of values it receives. 
+*/
+  function populateDDL(values,id) {
+    var list = document.getElementById(id);
+    list.innerHTML = '';   // Clear the existing content of the dropdown
+    for (var i = 0; i < values.length; i++) {
+      var option = document.createElement("option");
+      option.value = values[i];
+      option.text = values[i];
+      list.appendChild(option);
+    }
+  }   
+</script>
