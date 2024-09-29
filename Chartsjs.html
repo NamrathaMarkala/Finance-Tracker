@@ -1,0 +1,93 @@
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+  // Load the Visualization API and the corechart package.
+  google.charts.load('current', {'packages':['corechart']});
+  // Set a callback to run when the Google Visualization API is loaded.
+  google.charts.setOnLoadCallback(drawCharts);
+
+  function drawCharts() {
+    google.script.run.withSuccessHandler(drawChartIncomeVsExpenditure).getCurrentMonthIncomeAndExpenditure();
+    google.script.run.withSuccessHandler(drawChartExpenditureByCategory).getCurrentMonthExpenditureByCategory();
+    google.script.run.withSuccessHandler(drawChartIncomeByCategory).getCurrentMonthIncomeByCategory();
+  }
+
+  function drawChartIncomeVsExpenditure(data){
+    try{      
+      var chartData = google.visualization.arrayToDataTable(data);
+      
+      var options = {
+        title: "Income Vs Expenditure for the Month",
+        is3D: true,
+        backgroundColor: 'black',
+        colors: ['green', 'red'],
+        titleTextStyle: {
+          color: 'white',
+          fontSize: 18,
+          bold: true,
+          textAlign: 'center'
+        },
+        legend: {
+          textStyle: {
+            color: 'white'
+          },
+          position: 'bottom'
+        }
+      }
+      
+      var chart = new google.visualization.PieChart(document.getElementById('pie_chart_this_month_income_expenditure'));
+      chart.draw(chartData, options);
+    }catch (error){
+      console.error("An error occurred while displaying the chart:", error);
+    }
+  }
+
+ function drawChartExpenditureByCategory(data){
+  var chartData = google.visualization.arrayToDataTable(data);
+      
+      var options = {
+        title: "Expenditure By Category for the Current Month",
+        is3D: true,
+        backgroundColor: 'black',
+        titleTextStyle: {
+          color: 'white',
+          fontSize: 18,
+          bold: true,
+          textAlign: 'center'
+        },
+        legend: {
+          textStyle: {
+            color: 'white'
+          },
+          position: 'bottom'
+        }
+      }
+      
+      var chart = new google.visualization.PieChart(document.getElementById('pie_chart_this_month_expenditure'));
+      chart.draw(chartData, options);
+ }
+
+ function drawChartIncomeByCategory(data){
+  var chartData = google.visualization.arrayToDataTable(data);
+      
+      var options = {
+        title: "Income By Category for the Current Month",
+        is3D: true,
+        backgroundColor: 'black',
+        titleTextStyle: {
+          color: 'white',
+          fontSize: 18,
+          bold: true,
+          textAlign: 'center'
+        },
+        legend: {
+          textStyle: {
+            color: 'white'
+          },
+          position: 'bottom'
+        }
+      }
+      
+      var chart = new google.visualization.PieChart(document.getElementById('pie_chart_this_month_income'));
+      chart.draw(chartData, options);
+ }
+</script>
