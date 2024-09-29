@@ -1,0 +1,46 @@
+<br>
+<form class="form" id="budgetDetails" onsubmit="handleFormSubmit(this)">
+
+  <div class="form-group">
+    <label for="entryType"class="form-label">Entry Type</label><br>
+    <input type="radio" name="entryType" id="income" value="income">
+    <label for="income" class="btn btn-sm btn-success">Income</label>
+    <input type="radio" name="entryType" id="expenditure" value="expenditure">
+    <label for="expenditure" class="btn btn-sm btn-danger">Expenditure</label>
+  </div>
+
+  <div class="form-group">
+    <label for="entryCategory" class="form-label">Entry Category</label>
+    <select class="form-select form-select-sm" id="entryCategory" name="entryCategory" required>
+        <option>--Select Entry Category--</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="paymentMethod" class="form-label">Payment Method</label>
+    <select class="form-select form-select-sm" id="paymentMethod" name="paymentMethod" required>
+        <option>--Select Payment Method--</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="transactionDate">Transaction Date</label>
+    <input id="transactionDate" class="form-control" type="date" name="transactionDate"/>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <input type="text" name="description" id="description" class="form-control">
+  </div>
+
+  <div class="form-group">
+    <label for="amount">Amount</label>
+    <input type="number" step="0.01" name="amount" id="amount" class="form-control" required>
+  </div>
+
+  <div class="form-group mb-3">
+    <label for="remarks">Remarks</label>
+    <input type="text" name="remarks" id="remarks" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
